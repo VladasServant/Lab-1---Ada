@@ -3,11 +3,10 @@ with Ada.Text_IO;
 procedure Main is
 
    can_stop : boolean := false;
-   step : Long_Long_Integer := 1;
    pragma Atomic(can_stop);
 
    task type break_thread;
-   task type main_thread(id: Integer);
+   task type main_thread(id: Integer; step: Long_Long_Integer);
 
    task body break_thread is
    begin
@@ -18,7 +17,7 @@ procedure Main is
    task body main_thread is
       sum : Long_Long_Integer := 0;
       count : Long_Long_Integer := 0;
-      
+
    begin
       loop
          sum := sum + count * step;
@@ -30,12 +29,9 @@ procedure Main is
    end main_thread;
 
    b1 : break_thread;
-   t1 : main_thread(1);
-   t2 : main_thread(2);
-   t3 : main_thread(3);
-   t4 : main_thread(4);
-   t5 : main_thread(5);
-
+   Thread : array(1..10) of access main_thread;
 begin
-   null;
+   for i in 1..Thread'Length loop 
+      Thread(i) := new main_thread(i, 1);
+   end loop;
 end Main;
