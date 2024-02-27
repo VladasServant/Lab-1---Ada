@@ -3,6 +3,7 @@ with Ada.Text_IO;
 procedure Main is
 
    can_stop : boolean := false;
+   step : Long_Long_Integer := 1;
    pragma Atomic(can_stop);
 
    task type break_thread;
@@ -17,9 +18,10 @@ procedure Main is
    task body main_thread is
       sum : Long_Long_Integer := 0;
       count : Long_Long_Integer := 0;
+      
    begin
       loop
-         sum := sum + count;
+         sum := sum + count * step;
          count := count + 1;
          exit when can_stop;
       end loop;
