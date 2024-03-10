@@ -1,4 +1,5 @@
 with Ada.Text_IO;
+with Ada.Unchecked_Deallocation;
 
 procedure Main is
 
@@ -33,5 +34,11 @@ procedure Main is
 begin
    for i in 1..Thread'Length loop 
       Thread(i) := new main_thread(i, 1);
+   end loop;
+
+   for i in 1..Thread'Length loop 
+      if Thread(i).all'access /= null then
+         pragma Unchecked_Deallocation(Thread(i).all, Thread(i)'Access);
+      end if;
    end loop;
 end Main;
